@@ -1,0 +1,7 @@
+dash 
+pandas
+numpy
+plotly.express 
+plotly.graph_objects 
+SARIMAX
+gunicorn
