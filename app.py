@@ -24,8 +24,8 @@ def sarima_forecast(series, order, seasonal_order, steps):
 
 
 app = dash.Dash(__name__)
+server = app.server
 
-# Layout of the app
 app.layout = html.Div([
     html.H1("Food Price Analysis"),
     
@@ -37,7 +37,7 @@ app.layout = html.Div([
         multi=False
     ),
     
-    # Time series plot
+    
     dcc.Graph(id='time-series-plot'),
 ])
 @app.callback(
@@ -47,10 +47,10 @@ app.layout = html.Div([
 def update_plot(selected_country):
     filtered_df = df[df['country'] == selected_country]
 
-    # SARIMA Forecasting
-    steps = 5  # Number of steps to forecast
-    order = (1, 1, 1)  # Specify the SARIMA order (p, d, q)
-    seasonal_order = (1, 1, 1, 12)  # Specify the seasonal order (P, D, Q, S)
+    # sarima Forecasting
+    steps = 5  
+    order = (1, 1, 1)  
+    seasonal_order = (1, 1, 1, 12) 
 
     # Forecast future values
     forecast, confidence_interval = sarima_forecast(filtered_df['Close'], order, seasonal_order, steps)
@@ -60,7 +60,7 @@ def update_plot(selected_country):
     forecast_df = pd.DataFrame({'Date': forecast_dates, 'Forecast': forecast, 'Lower_CI': confidence_interval.iloc[:, 0].values, 'Upper_CI': confidence_interval.iloc[:, 1].values})
     filtered_df = pd.concat([filtered_df, forecast_df], ignore_index=True)
 
-    # Create an interactive time series plot
+    
     fig = go.Figure()
 
     # Actual values
@@ -93,12 +93,12 @@ def update_plot(selected_country):
     ))
  
 
-    # Additional customization can be done here
+    
     fig.update_layout(title=f'Time Series Plot for {selected_country} with Forecast', template='plotly_dark')
 
     return fig
 
-# Run the app
+
 if __name__ == '__main__':
     application = app.server
     application.run(debug=False)
